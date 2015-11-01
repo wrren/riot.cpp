@@ -28,7 +28,8 @@ set( riot_api_core_sources 	include/riot/core/core.h
 				include/riot/core/url.h 	src/riot/core/url.cpp
 				include/riot/core/json.h 	src/riot/core/json.cpp )
 
-set( riot_api_dto_sources 	include/riot/dto/summoner.h 	src/riot/dto/summoner.cpp 
+set( riot_api_dto_sources 	include/riot/dto/dto.h 	src/riot/dto/dto.cpp 
+				include/riot/dto/summoner.h 	src/riot/dto/summoner.cpp 
 				include/riot/dto/team.h 	src/riot/dto/team.cpp 
 				include/riot/dto/match.h 	src/riot/dto/match.cpp )
 

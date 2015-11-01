@@ -23,18 +23,25 @@ namespace riot
 		 * @param params 	Additional GET Parameters
 		 * @return 		URL String
 		 */
-		static std::string form( 	region region, 
+		static std::string form( 	region_t region, 
 						bool static_data,
 						const endpoint_t& endpoint,
 						const version_t& version,
 						const api_key_t& api_key,
 						const std::vector<std::string>& path = {},
 						const std::map<std::string, std::string> params = {} );
+
+		/**
+		 *	Collapse a list of parameters into a single comma-separated string
+		 * @param params 	Parameters
+		 * @return 		Parameters collapsed into a comma-separated string
+		 */
+		static std::string collapse( const std::vector<std::string>& params );
 		
 	private:
 
 		/// Region Mappings
-		static const std::map<region, const char*> m_region_mapping;
+		static const std::map<region_t, const char*> m_region_mapping;
 	};
 }
 

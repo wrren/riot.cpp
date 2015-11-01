@@ -1,20 +1,62 @@
 #ifndef RIOT_SUMMONER_H
 #define RIOT_SUMMONER_H
 
-#include <riot/core/core.h>
+#include <riot/dto/dto.h>
 
 namespace riot
 {
 	/**
-	*	League of Legends Summoner Data
-	*/
-	class summoner
+	 *	League of Legends Summoner Data
+	 */
+	class summoner : public dto_object
+	{
+	public:
+		
+		dto_uint 	id{ "id" };
+		dto_string 	name{ "name" };
+		dto_uint 	icon{ "profileIconId" };
+		dto_uint	level{ "summonerLevel" };
+		dto_uint	modified{ "revisionDate" };
+
+		/**
+		 *	Default Constructor
+		 */
+		summoner( const std::string& key = "" ) : dto_object( key )
+		{}
+		
+	protected:
+
+		/**
+		 *	Get child objects
+		 */
+		virtual std::vector<dto_base*> get_children() override
+		{
+			return { &id, &name, &icon, &level, &modified };
+		}
+	};
+
+	/**
+	 *	Contains the functions for retrieving summoners from the summoner endpoint
+	 */
+	class summoner_retriever : public dto_retriever
 	{
 	public:
 
-	private:
+		/// Endpoint Name
+		static const endpoint_t 	endpoint;
+		static const version_t 		version;
 
+		/**
+		 *	Default Constructor
+		 */
+		summoner_retriever( region_t& region, api_key_t& key );
 
+		/**
+		 *	Retrieve a set of summoners by their names
+		 * @param names 	Names to search for
+		 * @return 		List of summoners found
+		 */
+		std::vector<summoner> by_name( const std::vector<std::string>& names ) const;
 	};
 }
 

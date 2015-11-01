@@ -11,7 +11,7 @@ namespace riot
 	 *	There are Riot API servers in multiple regions, choose
 	 *	the region closest to you for best performance.
 	 */
-	enum class region
+	enum class region_t
 	{
 		NA,		// North America
 		EUW,		// EU-West

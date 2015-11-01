@@ -2,6 +2,7 @@
 #define RIOT_H
 
 #include <riot/core/core.h>
+#include <riot/dto/summoner.h>
 
 namespace riot
 {
@@ -18,13 +19,27 @@ namespace riot
 		 * @param region 	API Server Region
 		 * @param api_key 	Client API Key
 		 */
-		riot_client( 	region connect_region, 
+		riot_client( 	region_t connect_region, 
 				const api_key_t& api_key );
+
+		/// Access Summoner Retrieval Methods
+		const summoner_retriever& summoner() const { return m_summoner; }
+
+		/// Region Accessors
+		const region_t region() const		{ return m_region; }
+		void region( region_t region )		{ m_region = region; }
+
+		/// API Key Accessors
+		const api_key_t& key() const		{ return m_key;  }
+		void key( const api_key_t& key )	{ m_key = key; }
 
 	private:
 
+		/// Summoner Retriever
+		summoner_retriever	m_summoner;
+
 		/// Target API Server Region
-		region m_region;
+		region_t m_region;
 		/// API Client Key
 		api_key_t m_key;
 	};
