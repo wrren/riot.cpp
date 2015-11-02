@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <sstream>
 
 namespace riot
 {
@@ -31,6 +32,40 @@ namespace riot
 	typedef std::string 		version_t;
 	/// API Key Type
 	typedef std::string 		api_key_t;
+
+	/// Replace sections of string
+	std::string str_replace( const std::string& in, const std::string& find, const std::string& replacement );
+
+	/// Convert a vector of values into a vector of strings
+	template<typename T>
+	std::vector<std::string> str_convert( const std::vector<T>& in )
+	{
+		std::vector<std::string> out;
+
+		for( auto& v : in )
+		{
+			std::stringstream ss;
+			ss << v;
+			out.push_back( ss.str() );
+		}
+
+		return out;
+	}
+
+	template<typename T, typename U>
+	std::vector<std::string> str_convert( const std::vector<T>& in, std::function<U ( const T& )> func )
+	{
+		std::vector<std::string> out;
+
+		for( auto& v : in )
+		{
+			std::stringstream ss;
+			ss << func( v );
+			out.push_back( ss.str() );
+		}
+
+		return out;
+	}
 }
 
 #endif // RIOT_CORE_H

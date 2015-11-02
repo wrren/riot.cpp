@@ -1,11 +1,11 @@
 .PHONY: all test deps clean
 
 all:
-	cd build; cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=$(CURDIR) ..; make all install
+	cd build; cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=$(CURDIR) ..; make all
 
 test: all
 	cd tests/build; cmake ${CMAKE_ARGS} ..; make
-	./tests/build/tests ${TEST_ARGS}
+	./tests/build/unit ${TEST_ARGS}
 
 deps:
 	cd deps; cmake ${CMAKE_ARGS} .; make

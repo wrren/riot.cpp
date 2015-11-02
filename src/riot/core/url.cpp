@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iterator>
 
-#define URL_BUFFER_MAX_LENGTH 256
+#define URL_BUFFER_MAX_LENGTH 512
 
 namespace riot
 {
@@ -19,6 +19,10 @@ namespace riot
 		{ region_t::RU, 	"ru" },
 	};
 
+	std::string url::encode( const std::string& in )
+	{
+		return str_replace( in, " ", "%20" );
+	}
 
 	std::string url::form( 	region_t region, 
 				bool static_data,
@@ -67,7 +71,7 @@ namespace riot
 
 		url.erase( url.end() - 1 );
 		
-		return url;
+		return encode( url );
 	}
 
 	std::string url::collapse( const std::vector<std::string>& strings )

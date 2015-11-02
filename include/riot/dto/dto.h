@@ -4,6 +4,7 @@
 #include <riot/core/core.h>
 #include <riot/core/json.h>
 #include <riot/core/url.h>
+#include <iostream>
 
 namespace riot
 {
@@ -15,11 +16,21 @@ namespace riot
 	public:
 
 		/**
+		 *	Indicates whether a DTO field is optional or required. Optional fields
+		 *	that fail to parse or are not present will not raise an error
+		 */
+		enum presence
+		{
+			OPTIONAL,
+			REQUIRED
+		};
+
+		/**
 		 *	Construct a DTO object that's associated with the
 		 *	given key
 		 * @param key 	Object Key
 		 */
-		dto_base( const std::string& key = "" );
+		dto_base( const std::string& key = "", presence optional = REQUIRED );
 
 		/**
 		 *	Parse a value or object from the given JSON
@@ -34,10 +45,17 @@ namespace riot
 		 */
 		const char* key() const;
 
+		/**
+		 *	Check whether this field has been marked as optional
+		 */
+		bool optional() const;
+
 	private:
 
 		/// Object Key
-		std::string m_key;
+		std::string 	m_key;
+		/// Indicates whether this is an optional field
+		presence	m_optional;
 	};
 
 	/**
@@ -50,7 +68,7 @@ namespace riot
 		/**
 		 *	Default Constructor
 		 */
-		dto_object( const std::string& key ) : dto_base( key )
+		dto_object( const std::string& key, presence optional = REQUIRED ) : dto_base( key, optional )
 		{}
 
 		/**
@@ -60,15 +78,28 @@ namespace riot
 		 */
 		virtual bool parse( const rapidjson::Value& json ) override
 		{
-			for( auto& child : get_children() )
+			if( json.IsObject() && json.HasMember( key() ) && json[key()].IsObject() )
 			{
-				if( child->parse( json ) == false )
+				for( auto& child : get_children() )
 				{
-					return false;
+					if( !optional() && child->parse( json[key()] ) == false )
+					{
+						return false;
+					}
+				}
+			}
+			else if( json.IsObject() )
+			{
+				for( auto& child : get_children() )
+				{
+					if( !optional() && child->parse( json ) == false )
+					{
+						return false;
+					}
 				}
 			}
 
-			return true;
+			return optional();
 		}
 
 	protected:
@@ -91,7 +122,7 @@ namespace riot
 		/**
 		 *	Default Constructor
 		 */
-		dto_vector( const std::string& key = "" ) : dto_base( key )
+		dto_vector( const std::string& key = "", presence optional = REQUIRED ) : dto_base( key, optional )
 		{}
 
 		/**
@@ -107,7 +138,7 @@ namespace riot
 				{
 					T v;
 
-					if( v.parse( json[key()][i] ) == false )
+					if( !optional() && v.parse( json[key()][i] ) == false )
 					{
 						return false;
 					}
@@ -123,7 +154,7 @@ namespace riot
 				{
 					T v;
 
-					if( v.parse( json[i] ) == false )
+					if( !optional() && v.parse( json[i] ) == false )
 					{
 						return false;
 					}
@@ -134,7 +165,7 @@ namespace riot
 				return true;
 			}
 
-			return false;
+			return optional();
 		}
 
 		/**
@@ -161,10 +192,18 @@ namespace riot
 
 		/**
 		 *	Default Constructor
+		 * @param search_keys 	Object keys to search for
+		 * @param optional 	Indicates whether this is an optional field
+		 * @param encode 	true - Keys will be lower-cased and collapsed, false - keys used as-is
+		 * @param key		Map object key
 		 */
-		dto_map( const std::vector<std::string>& search_keys, const std::string& key = "" ) : 
-		dto_base( key ),
-		m_keys( search_keys )
+		dto_map( 	const std::vector<std::string>& search_keys, 
+				presence optional = REQUIRED,
+				bool encode = true, 
+				const std::string& key = "" ) : 
+		dto_base( key, optional ),
+		m_keys( search_keys ),
+		m_encode( encode )
 		{}
 
 		/**
@@ -178,7 +217,7 @@ namespace riot
 			{
 				for( auto& k : m_keys )
 				{
-					T v( k );
+					T v( m_encode ? encode( k ) : k );
 
 					if( v.parse( json[key()] ) )
 					{
@@ -192,7 +231,7 @@ namespace riot
 			{
 				for( auto& k : m_keys )
 				{
-					T v( k );
+					T v( m_encode ? encode( k ) : k );
 
 					if( v.parse( json ) )
 					{
@@ -203,7 +242,7 @@ namespace riot
 				return true;
 			}
 
-			return false;
+			return optional();
 		}
 
 		/**
@@ -216,6 +255,15 @@ namespace riot
 
 	private:
 
+		static std::string encode( const std::string& in )
+		{
+			std::string encoded( in );
+			std::transform( encoded.begin(), encoded.end(), encoded.begin(), ::tolower );
+			return str_replace( encoded, " ", "" );
+		}
+
+		/// Encode search keys during parse phase
+		bool 				m_encode;
 		/// Target Keys
 		std::vector<std::string> 	m_keys;
 		/// Parsed Vector
@@ -230,14 +278,14 @@ namespace riot
 	 *	Integral type specialization
 	 */
 	template<typename T>
-	class dto_value<T, typename std::enable_if<std::is_integral<T>::value>::type> : public dto_base
+	class dto_value<T, typename std::enable_if<std::is_integral<T>::value && ( sizeof(T) <= sizeof(uint32_t) ) && !std::is_same<T, bool>::value>::type> : public dto_base
 	{
 	public:
 
 		/**
 		 *	Default Constructor
 		 */
-		dto_value( const std::string& key = "" ) : dto_base( key )
+		dto_value( const std::string& key = "", presence optional = REQUIRED ) : dto_base( key, optional )
 		{}
 
 		/**
@@ -247,18 +295,67 @@ namespace riot
 		 */
 		virtual bool parse( const rapidjson::Value& json ) override
 		{
-			if( json.IsObject() && json.HasMember( key() ) && json[key()].IsInt() )
+			if( json.IsObject() && json.HasMember( key() ) && ( json[key()].IsInt() || json[key()].IsUint() ) )
 			{
-				m_value = json[key()].GetInt();
+				m_value = json[key()].IsInt() ? json[key()].GetInt() : json[key()].GetUint();
 				return true;
 			}
 			else if( json.IsInt() )
 			{
-				m_value = json.GetInt();
+				m_value = json.IsInt() ? json.GetInt() : json.GetUint();
 				return true;
 			}
 
-			return false;
+			return optional();
+		}
+
+		/**
+		 *	Conversion Operator
+		 */
+		operator T() const
+		{
+			return m_value;
+		}
+
+	private:
+
+		/// Value
+		T m_value;
+	};
+
+	/**
+	 *	Integral type specialization
+	 */
+	template<typename T>
+	class dto_value<T, typename std::enable_if<std::is_integral<T>::value && ( sizeof(T) > sizeof(uint32_t) )>::type> : public dto_base
+	{
+	public:
+
+		/**
+		 *	Default Constructor
+		 */
+		dto_value( const std::string& key = "", presence optional = REQUIRED ) : dto_base( key, optional )
+		{}
+
+		/**
+		 *	Parse the value from the given JSON data
+		 * @param json 	JSON Data
+		 * @return 	true - If parsing was successful, false otherwise.
+		 */
+		virtual bool parse( const rapidjson::Value& json ) override
+		{
+			if( json.IsObject() && json.HasMember( key() ) && ( json[key()].IsInt64() || json[key()].IsUint64() ) )
+			{
+				m_value = json[key()].IsInt64() ? json[key()].GetInt64() : json[key()].GetUint64();
+				return true;
+			}
+			else if( json.IsInt() )
+			{
+				m_value = json.IsInt64() ? json.GetInt64() : json.GetUint64();
+				return true;
+			}
+
+			return optional();
 		}
 
 		/**
@@ -286,7 +383,7 @@ namespace riot
 		/**
 		 *	Default Constructor
 		 */
-		dto_value( const std::string& key = "" ) : dto_base( key )
+		dto_value( const std::string& key = "", presence optional = REQUIRED ) : dto_base( key, optional )
 		{}
 
 		/**
@@ -307,7 +404,7 @@ namespace riot
 				return true;
 			}
 
-			return false;
+			return optional();
 		}
 
 		/**
@@ -335,7 +432,7 @@ namespace riot
 		/**
 		 *	Default Constructor
 		 */
-		dto_value( const std::string& key = "" ) : dto_base( key )
+		dto_value( const std::string& key = "", presence optional = REQUIRED ) : dto_base( key, optional )
 		{}
 
 		/**
@@ -356,7 +453,7 @@ namespace riot
 				return true;
 			}
 
-			return false;
+			return optional();
 		}
 
 		/**
@@ -384,7 +481,7 @@ namespace riot
 		/**
 		 *	Default Constructor
 		 */
-		dto_value( const std::string& key = "" ) : dto_base( key )
+		dto_value( const std::string& key = "", presence optional = REQUIRED ) : dto_base( key, optional )
 		{}
 
 		/**
@@ -405,7 +502,7 @@ namespace riot
 				return true;
 			}
 
-			return false;
+			return optional();
 		}
 
 		/**
@@ -434,14 +531,14 @@ namespace riot
 		 *	Construct a retriever, passing references to the current target
 		 *	region and api key
 		 */
-		dto_retriever( region_t& region, api_key_t& key );
+		dto_retriever( region_t region, const api_key_t& key );
 
 	protected:
 
 		/**
 		 *	Get the current target region
 		 */
-		const region_t& region() const;
+		region_t region() const;
 
 		/**
 		 *	Get the current API key
@@ -451,14 +548,16 @@ namespace riot
 	private:
 
 		/// Target Region
-		region_t& 	m_region;
+		region_t 	m_region;
 		/// API Key
-		api_key_t&	m_key;
+		api_key_t	m_key;
 	};
 
 	// Convenience Type Definitions
 	typedef dto_value<uint32_t> 	dto_uint;
+	typedef dto_value<uint64_t>	dto_uint64;
 	typedef dto_value<int32_t>	dto_int;
+	typedef dto_value<int64_t>	dto_int64;
 	typedef dto_value<double>	dto_double;
 	typedef dto_value<std::string> 	dto_string;
 	typedef dto_value<bool>		dto_bool;

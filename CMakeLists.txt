@@ -24,7 +24,7 @@ link_directories( ${CMAKE_CURRENT_SOURCE_DIR}/deps/curl/lib )
 # Setup Source Sets
 set( riot_api_sources 		include/riot/riot.h 		src/riot/riot.cpp )
 
-set( riot_api_core_sources 	include/riot/core/core.h 	
+set( riot_api_core_sources 	include/riot/core/core.h 	src/riot/core/core.cpp
 				include/riot/core/url.h 	src/riot/core/url.cpp
 				include/riot/core/json.h 	src/riot/core/json.cpp )
 

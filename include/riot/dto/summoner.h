@@ -12,11 +12,11 @@ namespace riot
 	{
 	public:
 		
-		dto_uint 	id{ "id" };
+		dto_uint64 	id{ "id" };
 		dto_string 	name{ "name" };
 		dto_uint 	icon{ "profileIconId" };
 		dto_uint	level{ "summonerLevel" };
-		dto_uint	modified{ "revisionDate" };
+		dto_uint64	modified{ "revisionDate" };
 
 		/**
 		 *	Default Constructor
@@ -49,7 +49,7 @@ namespace riot
 		/**
 		 *	Default Constructor
 		 */
-		summoner_retriever( region_t& region, api_key_t& key );
+		summoner_retriever( region_t region, const api_key_t& key );
 
 		/**
 		 *	Retrieve a set of summoners by their names
@@ -57,6 +57,13 @@ namespace riot
 		 * @return 		List of summoners found
 		 */
 		std::vector<summoner> by_name( const std::vector<std::string>& names ) const;
+
+		/**
+		 *	Retrieve a set of summoners by their ID
+		 * @param names 	IDs to search for
+		 * @return 		List of summoners found
+		 */
+		std::vector<summoner> by_id( const std::vector<uint64_t>& ids ) const;
 	};
 }
 

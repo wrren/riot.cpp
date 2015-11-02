@@ -21,6 +21,7 @@ namespace riot
 		std::string read_buffer;
 
 		curl_easy_setopt( curl, CURLOPT_URL, url.c_str() );
+		curl_easy_setopt( curl, CURLOPT_FOLLOWLOCATION, 1 );
 		curl_easy_setopt( curl, CURLOPT_WRITEDATA, &read_buffer );
 		curl_easy_setopt( curl, CURLOPT_WRITEFUNCTION, json::write_callback );
 
@@ -40,7 +41,7 @@ namespace riot
 		
 	bool json::ok() const
 	{
-		return m_document.HasParseError();
+		return !m_document.HasParseError();
 	}
 
 	int json::status() const
@@ -55,7 +56,7 @@ namespace riot
 
 	void json::parse( const std::string& response )
 	{
-		m_document.Parse( response.c_str() );
+		m_document.Parse<0>( response.c_str() );
 	}
 
 	size_t json::write_callback( void* data, size_t size, size_t nmemb, void* obj )

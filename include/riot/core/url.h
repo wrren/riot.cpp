@@ -39,7 +39,9 @@ namespace riot
 		static std::string collapse( const std::vector<std::string>& params );
 		
 	private:
-
+		
+		/// Encode an input string for inclusion in a URL
+		static std::string encode( const std::string& in );
 		/// Region Mappings
 		static const std::map<region_t, const char*> m_region_mapping;
 	};

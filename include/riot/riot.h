@@ -3,6 +3,7 @@
 
 #include <riot/core/core.h>
 #include <riot/dto/summoner.h>
+#include <riot/dto/team.h>
 
 namespace riot
 {
@@ -24,19 +25,21 @@ namespace riot
 
 		/// Access Summoner Retrieval Methods
 		const summoner_retriever& summoner() const { return m_summoner; }
+		/// Access Team Retrieval Methods
+		const team_retriever& team() const { return m_team; }
 
 		/// Region Accessors
 		const region_t region() const		{ return m_region; }
-		void region( region_t region )		{ m_region = region; }
 
 		/// API Key Accessors
 		const api_key_t& key() const		{ return m_key;  }
-		void key( const api_key_t& key )	{ m_key = key; }
 
 	private:
 
 		/// Summoner Retriever
 		summoner_retriever	m_summoner;
+		/// Team Retriever
+		team_retriever		m_team;
 
 		/// Target API Server Region
 		region_t m_region;
