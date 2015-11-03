@@ -1,4 +1,5 @@
 #include <riot/dto/dto.h>
+#include <riot/riot.h>
 
 namespace riot
 {
@@ -17,18 +18,13 @@ namespace riot
 		return m_optional == dto_base::OPTIONAL;
 	}
 
-	dto_retriever::dto_retriever( region_t region, const api_key_t& key ) :
-	m_region( region ),
-	m_key( key )
-	{}
-
-	region_t dto_retriever::region() const
+	riot_client* dto_base::client() const
 	{
-		return m_region;
+		return m_client;
 	}
 
-	const api_key_t& dto_retriever::key() const
+	void dto_base::set_client( riot_client* client )
 	{
-		return m_key;
+		m_client = client;
 	}
 }

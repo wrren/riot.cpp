@@ -2,19 +2,20 @@
 #define RIOT_TEAM_H
 
 #include <riot/dto/dto.h>
-#include <riot/dto/summoner.h>
+#include <riot/lol/summoner.h>
+#include <riot/lol/match.h>
 
 namespace riot
 {
 	/**
 	 *	Basic match summary for a team
 	 */
-	class match_summary : public dto_object
+	class match_summary : public dto_complex
 	{
 	public:
 
 		/// Default Constructor
-		match_summary( const std::string& key = "" ) : dto_object( key )
+		match_summary( const std::string& key = "" ) : dto_complex( key )
 		{}
 
 		/// Game ID
@@ -30,6 +31,9 @@ namespace riot
 		/// Indicates whether the team won the game
 		dto_bool 	win{ "win" };
 
+		/// Retrieve the full match data for this match
+		match 		get_match() const;
+
 	protected:
 
 		/**
@@ -44,12 +48,12 @@ namespace riot
 	/**
 	 *	Team Member Summary
 	 */
-	class team_member : public dto_object
+	class team_member : public dto_complex
 	{
 	public:
 
 		/// Default Constructor
-		team_member( const std::string& key = "" ) : dto_object( key )
+		team_member( const std::string& key = "" ) : dto_complex( key )
 		{}
 
 		/// Summoner ID
@@ -75,12 +79,12 @@ namespace riot
 	/**
 	 *	Team game roster object
 	 */
-	class roster : public dto_object
+	class roster : public dto_complex
 	{
 	public:
 
 		/// Default Constructor
-		roster( const std::string& key = "" ) : dto_object( key )
+		roster( const std::string& key = "" ) : dto_complex( key )
 		{}
 
 		/// Team Owner Summoner ID
@@ -102,12 +106,12 @@ namespace riot
 	/**
 	 *	Contains team performance statistics
 	 */
-	class team_stats : public dto_object
+	class team_stats : public dto_complex
 	{
 	public:
 
 		/// Default Constructor
-		team_stats( const std::string& key = "" ) : dto_object( key )
+		team_stats( const std::string& key = "" ) : dto_complex( key )
 		{}
 
 		/// Game Type ( RANKED_TEAM_5x5, etc. )
@@ -133,7 +137,7 @@ namespace riot
 	/**
 	 *	League of Legends Summoner Data
 	 */
-	class team : public dto_object
+	class team : public dto_complex
 	{
 	public:
 		
@@ -157,7 +161,7 @@ namespace riot
 		/**
 		 *	Default Constructor
 		 */
-		team( const std::string& key = "" ) : dto_object( key )
+		team( const std::string& key = "" ) : dto_complex( key )
 		{}
 		
 	protected:
@@ -170,6 +174,9 @@ namespace riot
 			return { &id, &last_game, &created_date, &name, &history, &roster, &status, &statistics };
 		}
 	};
+
+	/// Client Forward-Declaration
+	class riot_client;
 
 	/**
 	 *	Contains the functions for retrieving teams from the team endpoint
@@ -185,7 +192,7 @@ namespace riot
 		/**
 		 *	Default Constructor
 		 */
-		team_retriever( region_t region, const api_key_t& key );
+		team_retriever( riot_client* client );
 
 		/**
 		 *	Retrieve a set of teams by their summoner members

@@ -2,8 +2,9 @@
 #define RIOT_H
 
 #include <riot/core/core.h>
-#include <riot/dto/summoner.h>
-#include <riot/dto/team.h>
+#include <riot/lol/summoner.h>
+#include <riot/lol/team.h>
+#include <riot/lol/match.h>
 
 namespace riot
 {
@@ -27,6 +28,8 @@ namespace riot
 		const summoner_retriever& summoner() const { return m_summoner; }
 		/// Access Team Retrieval Methods
 		const team_retriever& team() const { return m_team; }
+		/// Access Match Retrieval Methods
+		const match_retriever& match() const { return m_match; }
 
 		/// Region Accessors
 		const region_t region() const		{ return m_region; }
@@ -40,6 +43,8 @@ namespace riot
 		summoner_retriever	m_summoner;
 		/// Team Retriever
 		team_retriever		m_team;
+		/// Match Retriever
+		match_retriever		m_match;
 
 		/// Target API Server Region
 		region_t m_region;

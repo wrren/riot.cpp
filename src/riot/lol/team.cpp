@@ -1,11 +1,17 @@
-#include <riot/dto/team.h>
+#include <riot/lol/team.h>
+#include <riot/riot.h>
 
 namespace riot
 {
 	const endpoint_t team_retriever::endpoint 	= "team";
 	const version_t team_retriever::version 	= "2.4";
 
-	team_retriever::team_retriever( region_t region, const api_key_t& key ) : dto_retriever( region, key )
+	match match_summary::get_match() const
+	{
+		return client()->match().by_id( { this->id } );
+	}
+
+	team_retriever::team_retriever( riot_client* client ) : dto_retriever( client )
 	{}
 
 	std::vector<team> team_retriever::by_summoner( const std::vector<summoner>& s ) const
@@ -16,6 +22,7 @@ namespace riot
 		} ) );
 
 		dto_map<dto_vector<team>> teams( summoners );
+		teams.set_client( client() );
 
 		auto response = json::get( url::form( region(), false, endpoint, version, key(), { "by-summoner", url::collapse( summoners ) } ) );
 
@@ -42,7 +49,8 @@ namespace riot
 	{
 		std::vector<std::string> id_strings( str_convert( ids ) );
 		dto_map<dto_vector<team>> teams( id_strings );
-
+		teams.set_client( client() );
+		
 		auto response = json::get( url::form( region(), false, endpoint, version, key(), { url::collapse( id_strings ) } ) );
 
 		if( response.ok() )

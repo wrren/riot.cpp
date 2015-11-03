@@ -23,6 +23,7 @@ add_executable(		unit
 add_executable( 	integration
 			int_key.cpp
 			int_team.cpp
+			int_match.cpp
 			int_summoner.cpp )
 
 target_link_libraries( unit riot_api )

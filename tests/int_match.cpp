@@ -12,7 +12,9 @@ TEST_CASE( "Retrieve Matches", "[dto]" )
 		auto res = client.summoner().by_name( { "General Atomic" } );
 		REQUIRE( res.size() != 0 );
 
-		res = client.summoner().by_id( { res[0].id } );
-		REQUIRE( res.size() != 0 );
+		auto teams = client.team().by_summoner( { res[0] } );
+		REQUIRE( teams.size() != 0 );
+
+		auto match = teams[0].history[0].get_match();
 	}
 }

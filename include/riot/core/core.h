@@ -35,8 +35,15 @@ namespace riot
 
 	/// Replace sections of string
 	std::string str_replace( const std::string& in, const std::string& find, const std::string& replacement );
-
-	/// Convert a vector of values into a vector of strings
+	
+	/// Convert various types to strings
+	template<typename T>
+	std::string str_convert( const T& in )
+	{
+		std::stringstream ss;
+		ss << in;
+		return ss.str();
+	}
 	template<typename T>
 	std::vector<std::string> str_convert( const std::vector<T>& in )
 	{
@@ -44,14 +51,11 @@ namespace riot
 
 		for( auto& v : in )
 		{
-			std::stringstream ss;
-			ss << v;
-			out.push_back( ss.str() );
+			out.push_back( str_convert( v ) );
 		}
 
 		return out;
 	}
-
 	template<typename T, typename U>
 	std::vector<std::string> str_convert( const std::vector<T>& in, std::function<U ( const T& )> func )
 	{
@@ -59,9 +63,7 @@ namespace riot
 
 		for( auto& v : in )
 		{
-			std::stringstream ss;
-			ss << func( v );
-			out.push_back( ss.str() );
+			out.push_back( str_convert( func( v ) ) );
 		}
 
 		return out;

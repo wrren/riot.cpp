@@ -8,7 +8,7 @@ namespace riot
 	/**
 	 *	League of Legends Summoner Data
 	 */
-	class summoner : public dto_object
+	class summoner : public dto_complex
 	{
 	public:
 		
@@ -21,7 +21,7 @@ namespace riot
 		/**
 		 *	Default Constructor
 		 */
-		summoner( const std::string& key = "" ) : dto_object( key )
+		summoner( const std::string& key = "" ) : dto_complex( key )
 		{}
 		
 	protected:
@@ -34,7 +34,7 @@ namespace riot
 			return { &id, &name, &icon, &level, &modified };
 		}
 	};
-
+	
 	/**
 	 *	Contains the functions for retrieving summoners from the summoner endpoint
 	 */
@@ -49,7 +49,7 @@ namespace riot
 		/**
 		 *	Default Constructor
 		 */
-		summoner_retriever( region_t region, const api_key_t& key );
+		summoner_retriever( riot_client* client );
 
 		/**
 		 *	Retrieve a set of summoners by their names
