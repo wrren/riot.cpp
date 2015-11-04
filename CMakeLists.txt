@@ -55,10 +55,6 @@ include_directories( 	${CMAKE_SOURCE_DIR}/include
 			${CMAKE_SOURCE_DIR}/deps/curl/include
 			${CMAKE_SOURCE_DIR}/deps/rapidjson/include )
 
-# Link cURL Statically
-add_definitions( -DCURL_STATICLIB )
-link_directories( ${CMAKE_SOURCE_DIR}/deps/curl/lib )
-
 # Setup Source Sets
 set( riot_api_sources 		include/riot/riot.h 				src/riot/riot.cpp )
 
@@ -91,13 +87,22 @@ source_group( "riot\\dto" 		FILES 	${riot_api_dto_sources} )
 source_group( "riot\\lol" 		FILES 	${riot_api_lol_sources} )
 source_group( "riot\\lol\\match" 	FILES 	${riot_api_lol_match_sources} )
 
+add_library( riot_api_core OBJECT 	${riot_api_sources} 
+					${riot_api_core_sources} 
+					${riot_api_dto_sources}
+					${riot_api_lol_sources}
+					${riot_api_lol_match_sources} )
 
 # Generate Library
-add_library( riot_api STATIC 	${riot_api_sources} 
-				${riot_api_core_sources} 
-				${riot_api_dto_sources}
-				${riot_api_lol_sources}
-				${riot_api_lol_match_sources} )
+
+if( WIN32 )
+	# Link cURL Statically
+	add_definitions( -DCURL_STATICLIB )
+	link_directories( ${CMAKE_SOURCE_DIR}/deps/curl/lib )
+endif()
+
+add_library( riot_api SHARED 	$<TARGET_OBJECTS:riot_api_core> )
+target_link_libraries( riot_api curl )
 
 # Enable C++11 Support
-set_property( TARGET riot_api PROPERTY CXX_STANDARD 11 )
+set_property( TARGET riot_api_core PROPERTY CXX_STANDARD 11 )

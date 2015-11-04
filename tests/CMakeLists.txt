@@ -8,8 +8,7 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
   set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage" )
 endif()
 
-link_directories( 	${CMAKE_CURRENT_SOURCE_DIR}/../lib
-			${CMAKE_CURRENT_SOURCE_DIR}/../deps/curl/lib )
+link_directories( 	${CMAKE_CURRENT_SOURCE_DIR}/../lib )
 
 include_directories( 	${CMAKE_CURRENT_SOURCE_DIR}
 			${CMAKE_CURRENT_SOURCE_DIR}/../include
@@ -30,11 +29,12 @@ target_link_libraries( unit riot_api )
 target_link_libraries( integration riot_api )
 
 if( WIN32 )
-  target_link_libraries( unit ws2_32 libcurl )
-  target_link_libraries( integration ws2_32 libcurl )
+	link_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../deps/curl/lib )
+  	target_link_libraries( unit ws2_32 libcurl )
+  	target_link_libraries( integration ws2_32 libcurl )
 else()
-  target_link_libraries( unit pthread curl )
-  target_link_libraries( integration pthread curl )
+  	target_link_libraries( unit pthread curl )
+  	target_link_libraries( integration pthread curl )
 endif()
 
 set_property( TARGET unit PROPERTY CXX_STANDARD 11 )
