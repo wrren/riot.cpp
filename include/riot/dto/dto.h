@@ -39,6 +39,8 @@ namespace riot
 		 */
 		operator const T&() const 	{ return m_value; }
 		operator T&() 			{ return m_value; }
+		const T& get() const 		{ return m_value; }
+		T& get() 			{ return m_value; }
 
 	private:
 
