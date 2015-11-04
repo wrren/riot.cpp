@@ -1,27 +1,63 @@
 cmake_minimum_required( VERSION 3.2 )
 project( riot_api )
+include( ExternalProject )
+find_package( Git REQUIRED )
+
+set( CURL_FLAGS -DBUILD_CURL_EXE=OFF -DBUILD_CURL_TESTS=OFF -DCURL_STATICLIB=ON )
+
+if( WIN32 )
+	ExternalProject_Add(
+		curl
+		URL http://curl.haxx.se/download/curl-7.45.0.tar.gz
+		PREFIX ${CMAKE_SOURCE_DIR}/deps/curl
+		PATCH_COMMAND ${CURL_PATCH_COMMAND}
+		CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}/deps/curl ${CURL_FLAGS}
+	)
+endif()
+
+ExternalProject_Add(
+	catch
+	PREFIX ${CMAKE_SOURCE_DIR}/deps/catch
+	GIT_REPOSITORY https://github.com/philsquared/Catch.git
+	TIMEOUT 10
+	UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+	CONFIGURE_COMMAND ""
+	BUILD_COMMAND ""
+	INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/deps/catch/src/catch/include ${CMAKE_SOURCE_DIR}/deps/catch/include
+	LOG_DOWNLOAD ON
+)
+
+ExternalProject_Add(
+	rapidjson
+	PREFIX ${CMAKE_SOURCE_DIR}/deps/rapidjson
+	GIT_REPOSITORY https://github.com/miloyip/rapidjson.git
+	TIMEOUT 10
+	UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+	CONFIGURE_COMMAND ""
+	BUILD_COMMAND ""
+	INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/deps/rapidjson/src/rapidjson/include ${CMAKE_SOURCE_DIR}/deps/rapidjson/include
+	LOG_DOWNLOAD ON
+)
 
 # Reconfigure Output Directories
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin )
-set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib )
-set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib )
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib )
 foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
-    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_CURRENT_SOURCE_DIR}/bin )
-    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_CURRENT_SOURCE_DIR}/lib )
-    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_CURRENT_SOURCE_DIR}/lib )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_SOURCE_DIR}/bin )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_SOURCE_DIR}/lib )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_SOURCE_DIR}/lib )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
-add_subdirectory( deps )
-
 # Set Include Paths
-include_directories( 	${CMAKE_CURRENT_SOURCE_DIR}/include
-			${CMAKE_CURRENT_SOURCE_DIR}/deps/curl/include
-			${CMAKE_CURRENT_SOURCE_DIR}/deps/rapidjson/include )
+include_directories( 	${CMAKE_SOURCE_DIR}/include
+			${CMAKE_SOURCE_DIR}/deps/curl/include
+			${CMAKE_SOURCE_DIR}/deps/rapidjson/include )
 
 # Link cURL Statically
 add_definitions( -DCURL_STATICLIB )
-link_directories( ${CMAKE_CURRENT_SOURCE_DIR}/deps/curl/lib )
+link_directories( ${CMAKE_SOURCE_DIR}/deps/curl/lib )
 
 # Setup Source Sets
 set( riot_api_sources 		include/riot/riot.h 				src/riot/riot.cpp )
