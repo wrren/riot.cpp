@@ -206,7 +206,7 @@ namespace riot
 		 * @param names 	IDs to search for
 		 * @return 		List of teams found
 		 */
-		std::vector<team> by_id( const std::vector<uint64_t>& ids ) const;
+		std::vector<team> by_id( const std::vector<std::string>& ids ) const;
 	};
 }
 

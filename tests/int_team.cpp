@@ -14,5 +14,8 @@ TEST_CASE( "Retrieve Teams", "[dto]" )
 
 		auto teams = client.team().by_summoner( { res[0] } );
 		REQUIRE( teams.size() != 0 );
+
+		teams = client.team().by_id( { teams[0].id } );
+		REQUIRE( teams.size() != 0 );
 	}
 }

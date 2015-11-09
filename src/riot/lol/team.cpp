@@ -45,13 +45,12 @@ namespace riot
 		return result;
 	}
 
-	std::vector<team> team_retriever::by_id( const std::vector<uint64_t>& ids ) const
+	std::vector<team> team_retriever::by_id( const std::vector<std::string>& ids ) const
 	{
-		std::vector<std::string> id_strings( str_convert( ids ) );
-		dto_map<dto_vector<team>> teams( id_strings );
+		dto_map<team> teams( ids, dto_base::REQUIRED, false );
 		teams.set_client( client() );
-		
-		auto response = json::get( url::form( region(), false, endpoint, version, key(), { url::collapse( id_strings ) } ) );
+
+		auto response = json::get( url::form( region(), false, endpoint, version, key(), { url::collapse( ids ) } ) );
 
 		if( response.ok() )
 		{
@@ -62,13 +61,6 @@ namespace riot
 			throw std::runtime_error( "API Request Failure" );
 		}
 		
-		std::vector<team> result;
-
-		for( dto_vector<team> t : teams.values() )
-		{
-			result.insert( result.end(), t.values().begin(), t.values().end() );
-		}
-
-		return result;
+		return teams.values();
 	}
 }
