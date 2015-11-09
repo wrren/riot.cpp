@@ -101,7 +101,7 @@ if( WIN32 )
 	link_directories( ${CMAKE_SOURCE_DIR}/deps/curl/lib )
 endif()
 
-add_library( riot_api SHARED 	$<TARGET_OBJECTS:riot_api_core> )
+add_library( riot_api STATIC $<TARGET_OBJECTS:riot_api_core> )
 target_link_libraries( riot_api curl )
 
 # Enable C++11 Support
