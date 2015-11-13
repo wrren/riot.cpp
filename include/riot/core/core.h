@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <functional>
 
+#include <riot/core/http.h>
+
 namespace riot
 {
 	/**

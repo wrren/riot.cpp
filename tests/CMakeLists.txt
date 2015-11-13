@@ -17,7 +17,8 @@ include_directories( 	${CMAKE_CURRENT_SOURCE_DIR}
                       	${CMAKE_CURRENT_SOURCE_DIR}/../deps/rapidjson/include)
 
 add_executable(		unit
- 			unit_url.cpp )
+ 			unit_url.cpp 
+ 			unit_http.cpp )
 
 add_executable( 	integration
 			int_key.cpp

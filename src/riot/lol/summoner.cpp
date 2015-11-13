@@ -1,5 +1,5 @@
 #include <riot/lol/summoner.h>
-#include <riot/core/json.h>
+#include <riot/core/core.h>
 #include <riot/riot.h>
 
 namespace riot
@@ -14,7 +14,7 @@ namespace riot
 	{
 		dto_map<summoner> summoners( names );
 		summoners.set_client( client() );
-		auto response = json::get( url::form( region(), false, endpoint, version, key(), { "by-name", url::collapse( names ) } ) );
+		auto response = http::request( url::form( region(), false, endpoint, version, key(), { "by-name", url::collapse( names ) } ) );
 
 		if( response.ok() )
 		{
@@ -33,7 +33,7 @@ namespace riot
 		std::vector<std::string> id_strings( str_convert( ids ) );
 		dto_map<summoner> summoners( id_strings );
 		summoners.set_client( client() );
-		auto response = json::get( url::form( region(), false, endpoint, version, key(), { url::collapse( id_strings ) } ) );
+		auto response = http::request( url::form( region(), false, endpoint, version, key(), { url::collapse( id_strings ) } ) );
 
 		if( response.ok() )
 		{

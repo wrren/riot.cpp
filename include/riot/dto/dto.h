@@ -14,6 +14,35 @@
 
 namespace riot
 {
+	/**
+	 *	Exception type thrown by DTO functions
+	 */
+	class dto_exception : std::runtime_error
+	{
+		enum class type
+		{
+			INVALID_CREDENTIALS,
+			API_LIMIT_EXCEEDED,
+			DATA_NOT_FOUND
+		};
+
+		/**
+		 *	Default Constructor
+		 */
+		dto_exception( type t, const std::string& what ) :
+		std::runtime_error( what ),
+		m_type( t )
+		{}
+
+	private:
+
+		/// Exception Type
+		type m_type;
+	};
+
+	/**
+	 *	Base class for simple types that can be encoded/decoded from a data stream
+	 */
 	template<typename T, typename Decoder>
 	class dto : public dto_base
 	{

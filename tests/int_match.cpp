@@ -15,6 +15,9 @@ TEST_CASE( "Retrieve Matches", "[dto]" )
 		auto teams = client.team().by_summoner( { res[0] } );
 		REQUIRE( teams.size() != 0 );
 
-		auto match = teams[0].history[0].get_match();
+		for( auto& ms : teams[0].history )
+		{
+			auto m = ms.get_match();
+		}
 	}
 }

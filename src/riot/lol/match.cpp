@@ -21,7 +21,7 @@ namespace riot
 		match m;
 		m.set_client( client() );
 
-		auto response = json::get( url::form( region(), false, endpoint, version, key(), { id_string } ) );
+		auto response = http::request( url::form( region(), false, endpoint, version, key(), { id_string } ) );
 
 		if( response.ok() )
 		{

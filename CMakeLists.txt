@@ -59,6 +59,7 @@ include_directories( 	${CMAKE_SOURCE_DIR}/include
 set( riot_api_sources 		include/riot/riot.h 				src/riot/riot.cpp )
 
 set( riot_api_core_sources 	include/riot/core/core.h 			src/riot/core/core.cpp
+				include/riot/core/http.h 			src/riot/core/http.cpp
 				include/riot/core/url.h 			src/riot/core/url.cpp
 				include/riot/core/json.h 			src/riot/core/json.cpp )
 
@@ -66,6 +67,7 @@ set( riot_api_dto_sources 	include/riot/dto/dto.h
 				include/riot/dto/dto_decoder.h
 				include/riot/dto/dto_vector.h 	
 				include/riot/dto/dto_map.h
+				include/riot/dto/dto_exception.h 		src/riot/dto/dto_exception.cpp 
 				include/riot/dto/dto_base.h 			src/riot/dto/dto_base.cpp
 				include/riot/dto/dto_complex.h 			src/riot/dto/dto_complex.cpp
 				include/riot/dto/dto_retriever.h 		src/riot/dto/dto_retriever.cpp )

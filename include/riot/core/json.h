@@ -31,20 +31,11 @@ namespace riot
 		};
 
 		/**
-		 *	Construct a response indicating that an error occurred during
-		 *	the HTTP request, providing the HTTP status code that was received
+		 *	Construct a JSON response with the specified status code
 		 * @param status 	HTTP status code
 		 */
 		json( int status );
 
-		/**
-		 *	Initiate a GET request for the provided URL and generate a json response object using
-		 *	the result
-		 * @param url 	Target URL for the HTTP request
-		 * @return 	json response
-		 */
-		static json get( const std::string& url );
-		
 		/**
 		 *	Indicates whether the server response was successfully received and parsed. 
 		 *	If ok() return false, but the status code is 200 OK, this indicates that a parse
@@ -60,22 +51,18 @@ namespace riot
 		 */
 		int status() const;
 
-		/// JSON Document Accessor
-		const rapidjson::Document& document() const;
-
-	private:
-
 		/**
 		 *	Parse the provided response body
 		 * @param response 	Request response body
 		 */
 		void parse( const std::string& response );
 
-		/**
-		 *	cURL write callback
-		 */
-		static size_t write_callback( void* data, size_t size, size_t nmemb, void* obj );
+		/// JSON Document Accessor
+		const rapidjson::Document& document() const;
 
+	private:
+
+		
 		/// Status Code
 		int m_status;
 		/// JSON Document
