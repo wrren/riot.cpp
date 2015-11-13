@@ -28,7 +28,7 @@ int main( int argc, char** argv )
 	'/';
 #endif	
 	auto last = pwd.find_last_of( separator );
-	std::string api_key_path = pwd.substr( 0, last ) + "/../test_api_key.txt";
+	std::string api_key_path = pwd.substr( 0, last ) + "test_api_key.txt";
 
 	std::ifstream ifs( api_key_path );
 	std::string key( 	( std::istreambuf_iterator<char>( ifs ) ),

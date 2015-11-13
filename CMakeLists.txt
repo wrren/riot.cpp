@@ -82,7 +82,8 @@ set( riot_api_dto_sources 	include/riot/dto/dto.h
 
 set( riot_api_lol_sources	include/riot/lol/summoner.h 			src/riot/lol/summoner.cpp 
 				include/riot/lol/team.h 			src/riot/lol/team.cpp 
-				include/riot/lol/match.h 			src/riot/lol/match.cpp )
+				include/riot/lol/match.h 			src/riot/lol/match.cpp
+				include/riot/lol/game.h 			src/riot/lol/game.cpp )
 
 set( riot_api_lol_match_sources	include/riot/lol/match/participant.h 		src/riot/lol/match/participant.cpp
 				include/riot/lol/match/participant_identity.h 	src/riot/lol/match/participant_identity.cpp
@@ -107,14 +108,12 @@ source_group( "riot\\dto" 		FILES 	${riot_api_dto_sources} )
 source_group( "riot\\lol" 		FILES 	${riot_api_lol_sources} )
 source_group( "riot\\lol\\match" 	FILES 	${riot_api_lol_match_sources} )
 
-add_library( riot_api_core OBJECT 	${riot_api_sources} 
-					${riot_api_core_sources} 
-					${riot_api_dto_sources}
-					${riot_api_lol_sources}
-					${riot_api_lol_match_sources} )
-
 # Generate Library
-add_library( riot_api STATIC $<TARGET_OBJECTS:riot_api_core> )
+add_library( riot_api STATIC 	${riot_api_sources} 
+				${riot_api_core_sources} 
+				${riot_api_dto_sources}
+				${riot_api_lol_sources}
+				${riot_api_lol_match_sources} )
 
 if( WIN32 )
 	# Link cURL Statically
@@ -147,6 +146,6 @@ add_test( unit riot_api_unit )
 add_test( integration riot_api_integration )
 
 # Enable C++11 Support
-set_property( TARGET riot_api_core 		PROPERTY CXX_STANDARD 11 )
+set_property( TARGET riot_api 			PROPERTY CXX_STANDARD 11 )
 set_property( TARGET riot_api_unit 		PROPERTY CXX_STANDARD 11 )
 set_property( TARGET riot_api_integration 	PROPERTY CXX_STANDARD 11 )
