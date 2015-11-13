@@ -6,6 +6,13 @@ find_package( Git REQUIRED )
 set( CURL_FLAGS -DBUILD_CURL_EXE=OFF -DBUILD_CURL_TESTS=OFF -DCURL_STATICLIB=ON )
 
 if( WIN32 )
+	set( BUILD_SHARED_LIBS OFF )
+
+	if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
+		set( CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage" )
+		set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage" )
+	endif()
+
 	ExternalProject_Add(
 		curl
 		URL http://curl.haxx.se/download/curl-7.45.0.tar.gz
@@ -53,6 +60,7 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 # Set Include Paths
 include_directories( 	${CMAKE_SOURCE_DIR}/include
 			${CMAKE_SOURCE_DIR}/deps/curl/include
+			${CMAKE_SOURCE_DIR}/deps/catch/include
 			${CMAKE_SOURCE_DIR}/deps/rapidjson/include )
 
 # Setup Source Sets
@@ -82,6 +90,16 @@ set( riot_api_lol_match_sources	include/riot/lol/match/participant.h 		src/riot/
 				include/riot/lol/match/player.h 		src/riot/lol/match/player.cpp
 				include/riot/lol/match/team.h 			src/riot/lol/match/team.cpp )
 
+set(	riot_unit_test_sources
+	tests/unit_url.cpp 
+	tests/unit_http.cpp )
+
+set( 	riot_integration_test_sources
+	tests/int_key.cpp
+	tests/int_team.cpp
+	tests/int_match.cpp
+	tests/int_summoner.cpp )
+
 # Visual Studio Source Groups
 source_group( "riot" 			FILES 	${riot_api_sources} )
 source_group( "riot\\core" 		FILES 	${riot_api_core_sources} )
@@ -96,15 +114,39 @@ add_library( riot_api_core OBJECT 	${riot_api_sources}
 					${riot_api_lol_match_sources} )
 
 # Generate Library
+add_library( riot_api STATIC $<TARGET_OBJECTS:riot_api_core> )
 
 if( WIN32 )
 	# Link cURL Statically
-	add_definitions( -DCURL_STATICLIB )
-	link_directories( ${CMAKE_SOURCE_DIR}/deps/curl/lib )
+	
+
+else()
+	target_link_libraries( riot_api curl )
 endif()
 
-add_library( riot_api STATIC $<TARGET_OBJECTS:riot_api_core> )
-target_link_libraries( riot_api curl )
+
+
+add_executable(	riot_api_unit ${riot_unit_test_sources} )
+add_executable( riot_api_integration ${riot_integration_test_sources} )
+
+target_link_libraries( riot_api_unit riot_api )
+target_link_libraries( riot_api_integration riot_api )
+
+if( WIN32 )
+	add_definitions( -DCURL_STATICLIB )
+	target_link_libraries( riot_api_unit 		${CMAKE_CURRENT_SOURCE_DIR}/deps/curl/lib/libcurl.lib ws2_32 )
+  	target_link_libraries( riot_api_integration 	${CMAKE_CURRENT_SOURCE_DIR}/deps/curl/lib/libcurl.lib ws2_32 )
+	target_link_libraries( riot_api 		${CMAKE_SOURCE_DIR}/deps/curl/lib/libcurl.lib ws2_32 )
+else()
+  	target_link_libraries( riot_api_unit pthread curl )
+  	target_link_libraries( riot_api_integration pthread curl )
+endif()
+
+enable_testing()
+add_test( unit riot_api_unit )
+add_test( integration riot_api_integration )
 
 # Enable C++11 Support
-set_property( TARGET riot_api_core PROPERTY CXX_STANDARD 11 )
+set_property( TARGET riot_api_core 		PROPERTY CXX_STANDARD 11 )
+set_property( TARGET riot_api_unit 		PROPERTY CXX_STANDARD 11 )
+set_property( TARGET riot_api_integration 	PROPERTY CXX_STANDARD 11 )

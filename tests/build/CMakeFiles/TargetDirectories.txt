@@ -1,0 +1,3 @@
+D:/Development/riot-api-cpp/tests/build/CMakeFiles/ALL_BUILD.dir
+D:/Development/riot-api-cpp/tests/build/CMakeFiles/tests.dir
+D:/Development/riot-api-cpp/tests/build/CMakeFiles/ZERO_CHECK.dir

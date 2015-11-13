@@ -24,7 +24,8 @@ namespace riot
 		dto_map<dto_vector<team>> teams( summoners );
 		teams.set_client( client() );
 
-		auto response = http::request( url::form( region(), false, endpoint, version, key(), { "by-summoner", url::collapse( summoners ) } ) );
+		auto response = http::request(	url::form( region(), false, endpoint, version, key(), { "by-summoner", url::collapse( summoners ) } ),
+						client()->options().wait_on_rate_limit );
 
 		if( response.ok() )
 		{
@@ -50,7 +51,8 @@ namespace riot
 		dto_map<team> teams( ids, dto_base::REQUIRED, false );
 		teams.set_client( client() );
 
-		auto response = http::request( url::form( region(), false, endpoint, version, key(), { url::collapse( ids ) } ) );
+		auto response = http::request(	url::form( region(), false, endpoint, version, key(), { url::collapse( ids ) } ),
+						client()->options().wait_on_rate_limit );
 
 		if( response.ok() )
 		{

@@ -16,29 +16,49 @@ namespace riot
 	public:
 
 		/**
+		 *	Client Options
+		 */
+		struct options_t
+		{
+			// If true, client requests will sleep the current thread and
+			// retry when the rate limit is hit. Otherwise a dto_rate_exception
+			// will be thrown
+			bool wait_on_rate_limit = true;
+		};
+
+		/**
 		 *	Construct a Riot API Client that will connect to the
 		 *	API server for the given region using the provided API key
 		 * @param region 	API Server Region
 		 * @param api_key 	Client API Key
+		 * @param options	Client Options
 		 */
 		riot_client( 	region_t connect_region, 
-				const api_key_t& api_key );
+				const api_key_t& api_key,
+				const options_t = options_t() );
 
 		/// Access Summoner Retrieval Methods
-		const summoner_retriever& summoner() const { return m_summoner; }
+		const summoner_retriever& summoner() const;
+		
 		/// Access Team Retrieval Methods
-		const team_retriever& team() const { return m_team; }
+		const team_retriever& team() const;
+		
 		/// Access Match Retrieval Methods
-		const match_retriever& match() const { return m_match; }
+		const match_retriever& match() const;
 
 		/// Region Accessors
-		const region_t region() const		{ return m_region; }
+		const region_t region() const;
 
 		/// API Key Accessors
-		const api_key_t& key() const		{ return m_key;  }
+		const api_key_t& key() const;
+
+		/// Client Options
+		const options_t& options() const;
 
 	private:
 
+		/// Client Options
+		options_t		m_options;
 		/// Summoner Retriever
 		summoner_retriever	m_summoner;
 		/// Team Retriever

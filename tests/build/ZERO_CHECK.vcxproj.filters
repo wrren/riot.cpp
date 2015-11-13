@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Development\riot-api-cpp\tests\build\CMakeFiles\4762e79e3630c1568268edabaa9775f4\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{8264825F-F6F4-3209-ACAA-53DA17060831}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

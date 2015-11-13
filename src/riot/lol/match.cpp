@@ -21,7 +21,8 @@ namespace riot
 		match m;
 		m.set_client( client() );
 
-		auto response = http::request( url::form( region(), false, endpoint, version, key(), { id_string } ) );
+		auto response = http::request(	url::form( region(), false, endpoint, version, key(), { id_string } ),
+						client()->options().wait_on_rate_limit );
 
 		if( response.ok() )
 		{

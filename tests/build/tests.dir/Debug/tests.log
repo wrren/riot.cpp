@@ -1,0 +1,13 @@
+﻿Build started 01/11/2015 23:36:10.
+     1>Project "D:\Development\riot-api-cpp\tests\build\tests.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"D:\Development\riot-api-cpp\tests\..\include" /I"D:\Development\riot-api-cpp\tests\..\deps\curl\include" /I"D:\Development\riot-api-cpp\tests\..\deps\catch\include" /I"D:\Development\riot-api-cpp\tests\..\deps\rapidjson\include" /Zi /nologo /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"tests.dir\Debug\\" /Fd"tests.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt "D:\Development\riot-api-cpp\tests\test_url.cpp"
+         test_url.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Development\riot-api-cpp\tests\build\Debug\tests.exe" /INCREMENTAL /NOLOGO /LIBPATH:"D:/Development/riot-api-cpp/tests/../lib" /LIBPATH:"D:/Development/riot-api-cpp/tests/../lib/Debug" /LIBPATH:"D:/Development/riot-api-cpp/tests/../deps/curl/lib" /LIBPATH:"D:/Development/riot-api-cpp/tests/../deps/curl/lib/Debug" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib riot_api.lib ws2_32.lib libcurl.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:/Development/riot-api-cpp/tests/build/Debug/tests.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Development/riot-api-cpp/tests/build/Debug/tests.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug tests.dir\Debug\test_url.obj
+         tests.vcxproj -> D:\Development\riot-api-cpp\tests\build\Debug\tests.exe
+     1>Done Building Project "D:\Development\riot-api-cpp\tests\build\tests.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.52
