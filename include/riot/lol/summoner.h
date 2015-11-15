@@ -5,6 +5,9 @@
 
 namespace riot
 {
+	/// Recent Game Forward-Declaration
+	class recent_games;
+
 	/**
 	 *	League of Legends Summoner Data
 	 */
@@ -23,6 +26,11 @@ namespace riot
 		 */
 		summoner( const std::string& key = "" ) : dto_complex( key )
 		{}
+
+		/**
+		 *	Get a list of games recently played by this summoner
+		 */
+		recent_games get_recent_games() const;
 		
 	protected:
 

@@ -163,6 +163,15 @@ namespace riot
 		 */
 		team( const std::string& key = "" ) : dto_complex( key )
 		{}
+
+		/**
+		 *	Get detailed statistics on this team's match history.
+		 *	WARNING: This will execute one API request per match in
+		 *	the team's history list and may result in thread sleeps
+		 *	or exceptions depending on the client configuration.
+		 * @return	Vector containing match history data
+		 */
+		std::vector<match> get_matches() const;
 		
 	protected:
 

@@ -65,4 +65,16 @@ namespace riot
 		
 		return teams.values();
 	}
+
+	std::vector<match> team::get_matches() const
+	{
+		std::vector<match> matches;
+
+		for( auto& summary : history.values() )
+		{
+			matches.push_back( summary.get_match() );
+		}
+
+		return matches;
+	}
 }

@@ -7,6 +7,11 @@ namespace riot
 	const endpoint_t summoner_retriever::endpoint 	= "summoner";
 	const version_t summoner_retriever::version 	= "1.4";
 
+	recent_games summoner::get_recent_games() const
+	{
+		return client()->games().by_summoner( *this );
+	}
+
 	summoner_retriever::summoner_retriever( riot_client* client ) : dto_retriever( client )
 	{}
 
