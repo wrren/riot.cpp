@@ -8,7 +8,8 @@ namespace riot
 	m_key( key ),
 	m_summoner( this ),
 	m_team( this ),
-	m_match( this )
+	m_match( this ),
+	m_games( this )
 	{}
 
 	const summoner_retriever& riot_client::summoner() const
@@ -24,6 +25,11 @@ namespace riot
 	const match_retriever& riot_client::match() const 
 	{ 
 		return m_match; 
+	}
+
+	const game_retriever& riot_client::games() const 
+	{ 
+		return m_games; 
 	}
 
 	const region_t riot_client::region() const 

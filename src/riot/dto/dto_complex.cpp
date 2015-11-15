@@ -14,7 +14,7 @@ namespace riot
 			for( auto& child : get_children() )
 			{
 				child->set_client( client() );
-				if( !optional() && child->parse( json[key()] ) == false )
+				if( !child->parse( json[key()] ) && !optional() )
 				{
 					return false;
 				}
@@ -27,7 +27,7 @@ namespace riot
 			for( auto& child : get_children() )
 			{
 				child->set_client( client() );
-				if( !optional() && child->parse( json ) == false )
+				if( !child->parse( json ) && !optional()  )
 				{
 					return false;
 				}
@@ -36,6 +36,7 @@ namespace riot
 			return true;
 		}
 
+		set_present( false );
 		return optional();
 	}
 }

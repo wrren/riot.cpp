@@ -99,6 +99,7 @@ set( 	riot_integration_test_sources
 	tests/int_key.cpp
 	tests/int_team.cpp
 	tests/int_match.cpp
+	tests/int_game.cpp
 	tests/int_summoner.cpp )
 
 # Visual Studio Source Groups

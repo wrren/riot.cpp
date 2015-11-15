@@ -11,6 +11,9 @@ namespace riot
 {
 	namespace http
 	{
+		/// Request Cache
+		std::map<std::string, std::string> m_cache;
+
 		size_t request_write_callback( void* data, size_t size, size_t nmemb, void* obj )
 		{
 			( ( std::string* ) obj )->append( ( char* ) data, size * nmemb );
@@ -66,11 +69,19 @@ namespace riot
 
 		json request( const std::string& url, bool retry )
 		{
+			// If we've already cached a response for this URL, skip the HTTP request
+			if( m_cache.find( url ) != m_cache.end() )
+			{
+				json cached( 200 );
+				cached.parse( m_cache[url] );
+				return cached;
+			}
+
 			CURL* curl = curl_easy_init();
 
 			if( curl == NULL )
 			{
-				return json( json::CLIENT_ERROR );
+				throw dto_exception( dto_exception::REQUEST_EXCEPTION, "Failed to Send Request" );
 			}
 
 			CURLcode result;
@@ -93,6 +104,9 @@ namespace riot
 			if( result == CURLE_OK && status_code == 200 )
 			{
 				response.parse( read_buffer );
+
+				// Add the response to the cache
+				m_cache[url] = read_buffer;
 			}
 			else if( status_code == 400 )
 			{

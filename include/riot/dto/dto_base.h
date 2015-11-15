@@ -50,14 +50,31 @@ namespace riot
 		 */
 		bool optional() const;
 
+		/**
+		 *	For optional fields, indicates whether the data associated with
+		 *	the field was parsed.
+		 * @return true - If the data for this field was present, false if it was missing
+		 */
+		bool is_present() const;
+
 		/// Client Accessors
 		riot_client* client() const;
 		void set_client( riot_client* client );
 
+	protected:
+
+		/**
+		 *	Set whether the data for this field was present during parsing
+		 * @param present true - If the data for the field was present, false otherwise
+		 */
+		void set_present( bool present );
+
 	private:
 
 		/// Client Handle
-		riot_client* m_client;
+		riot_client*	m_client;
+		/// For optional fields, indicates whether the field data was present during parsing
+		bool		m_present;
 		/// Object Key
 		std::string 	m_key;
 		/// Indicates whether this is an optional field

@@ -29,7 +29,7 @@ namespace riot
 
 		/// Client Accessor
 		riot_client* client() const;
-
+		
 	private:
 
 		/// Riot Client

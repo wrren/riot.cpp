@@ -4,6 +4,7 @@
 #include <riot/core/core.h>
 #include <riot/lol/summoner.h>
 #include <riot/lol/team.h>
+#include <riot/lol/game.h>
 #include <riot/lol/match.h>
 
 namespace riot
@@ -42,6 +43,9 @@ namespace riot
 		
 		/// Access Team Retrieval Methods
 		const team_retriever& team() const;
+
+		/// Access Game Retrieval Methods
+		const game_retriever& games() const;
 		
 		/// Access Match Retrieval Methods
 		const match_retriever& match() const;
@@ -65,6 +69,8 @@ namespace riot
 		team_retriever		m_team;
 		/// Match Retriever
 		match_retriever		m_match;
+		/// Game Retriever
+		game_retriever 		m_games;
 
 		/// Target API Server Region
 		region_t m_region;

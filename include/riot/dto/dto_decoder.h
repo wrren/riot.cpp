@@ -22,12 +22,11 @@ namespace riot
 		/**
 		 *	Decode the target type from the given data
 		 * @param key 		Search Key
-		 * @param optional	Indicates whether this value must be present
 		 * @param value 	Output Value
 		 * @param json 		JSON Data
 		 * @return 		true - If the data was decoded or is optional, false otherwise.
 		 */
-		bool operator()( const char* key, bool optional, T& value, const rapidjson::Value& json )
+		bool operator()( const char* key, T& value, const rapidjson::Value& json )
 		{
 			if( json.IsObject() && json.HasMember( key ) && ( ( json[key] ).*( Checker ) )() )
 			{
@@ -40,7 +39,7 @@ namespace riot
 				return true;
 			}
 
-			return optional;
+			return false;
 		}	
 	};
 

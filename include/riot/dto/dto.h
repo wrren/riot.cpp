@@ -60,7 +60,16 @@ namespace riot
 		 */
 		virtual bool parse( const rapidjson::Value& json ) override
 		{
-			return m_decoder( key(), optional(), m_value, json );
+			if( !m_decoder( key(), m_value, json ) && !optional() )
+			{
+				set_present( false );
+				return false;
+			}
+			else
+			{
+				set_present( true );
+				return true;
+			}
 		}
 
 		/**

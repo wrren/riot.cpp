@@ -18,6 +18,16 @@ namespace riot
 		return m_optional == dto_base::OPTIONAL;
 	}
 
+	bool dto_base::is_present() const
+	{
+		return m_present;
+	}
+
+	void dto_base::set_present( bool present )
+	{
+		m_present = present;
+	}
+
 	riot_client* dto_base::client() const
 	{
 		return m_client;
