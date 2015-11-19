@@ -24,7 +24,7 @@ namespace riot
 			// If true, client requests will sleep the current thread and
 			// retry when the rate limit is hit. Otherwise a dto_rate_exception
 			// will be thrown
-			bool wait_on_rate_limit = true;
+			bool wait_on_rate_limit;
 		};
 
 		/**
@@ -36,7 +36,7 @@ namespace riot
 		 */
 		riot_client( 	region_t connect_region, 
 				const api_key_t& api_key,
-				const options_t = options_t() );
+				const options_t = options_t{ true } );
 
 		/// Access Summoner Retrieval Methods
 		const summoner_retriever& summoner() const;

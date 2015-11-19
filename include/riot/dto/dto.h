@@ -75,6 +75,8 @@ namespace riot
 		/**
 		 *	Get access to the underlying value
 		 */
+		const T& operator()() const	{ return m_value; }
+		T& operator()()			{ return m_value; }
 		operator const T&() const 	{ return m_value; }
 		operator T&() 			{ return m_value; }
 		const T& get() const 		{ return m_value; }
