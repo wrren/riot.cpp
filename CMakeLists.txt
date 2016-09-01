@@ -22,30 +22,6 @@ if( WIN32 )
 	)
 endif()
 
-ExternalProject_Add(
-	catch
-	PREFIX ${CMAKE_SOURCE_DIR}/deps/catch
-	GIT_REPOSITORY https://github.com/philsquared/Catch.git
-	TIMEOUT 10
-	UPDATE_COMMAND ${GIT_EXECUTABLE} pull
-	CONFIGURE_COMMAND ""
-	BUILD_COMMAND ""
-	INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/deps/catch/src/catch/include ${CMAKE_SOURCE_DIR}/deps/catch/include
-	LOG_DOWNLOAD ON
-)
-
-ExternalProject_Add(
-	rapidjson
-	PREFIX ${CMAKE_SOURCE_DIR}/deps/rapidjson
-	GIT_REPOSITORY https://github.com/miloyip/rapidjson.git
-	TIMEOUT 10
-	UPDATE_COMMAND ${GIT_EXECUTABLE} pull
-	CONFIGURE_COMMAND ""
-	BUILD_COMMAND ""
-	INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/deps/rapidjson/src/rapidjson/include ${CMAKE_SOURCE_DIR}/deps/rapidjson/include
-	LOG_DOWNLOAD ON
-)
-
 # Reconfigure Output Directories
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib )
