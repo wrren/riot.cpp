@@ -4,18 +4,18 @@
 
 namespace riot
 {
-	const endpoint_t summoner_retriever::endpoint 	= "summoner";
-	const version_t summoner_retriever::version 	= "1.4";
+	const endpoint_t summoner::retriever::endpoint 	= "summoner";
+	const version_t summoner::retriever::version 	= "1.4";
 
 	recent_games summoner::get_recent_games() const
 	{
 		return client()->games().by_summoner( *this );
 	}
 
-	summoner_retriever::summoner_retriever( riot_client* client ) : dto_retriever( client )
+	summoner::retriever::retriever( riot_client* client ) : dto_retriever( client )
 	{}
 
-	std::vector<summoner> summoner_retriever::by_name( const std::vector<std::string>& names ) const
+	std::vector<summoner> summoner::retriever::by_name( const std::vector<std::string>& names ) const
 	{
 		dto_map<summoner> summoners( names );
 		summoners.set_client( client() );
@@ -34,7 +34,7 @@ namespace riot
 		return summoners.values();
 	}
 
-	std::vector<summoner> summoner_retriever::by_id( const std::vector<uint64_t>& ids ) const
+	std::vector<summoner> summoner::retriever::by_id( const std::vector<uint64_t>& ids ) const
 	{
 		std::vector<std::string> id_strings( str_convert( ids ) );
 		dto_map<summoner> summoners( id_strings );

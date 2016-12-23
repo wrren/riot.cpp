@@ -9,10 +9,10 @@ TEST_CASE( "Retrieve Summoners", "[dto]" )
 
 	SECTION( "Get Summoner List" )
 	{
-		auto res = client.summoner().by_name( { "General Atomic" } );
+		auto res = client.summoners().by_name( { "General Atomic" } );
 		REQUIRE( res.size() != 0 );
 
-		res = client.summoner().by_id( { res[0].id } );
+		res = client.summoners().by_id( { res[0].id } );
 		REQUIRE( res.size() != 0 );
 	}
 }

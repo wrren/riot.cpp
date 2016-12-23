@@ -44,14 +44,14 @@ namespace riot
 		return{ &games, &summoner };
 	}
 
-	const endpoint_t game_retriever::endpoint	= "game";
-	const version_t game_retriever::version		= "1.3";
+	const endpoint_t game::retriever::endpoint	= "game";
+	const version_t game::retriever::version		= "1.3";
 
-	game_retriever::game_retriever( riot_client* client ) :
+	game::retriever::retriever( riot_client* client ) :
 	dto_retriever( client )
 	{}
 
-	recent_games game_retriever::by_summoner( uint64_t id ) const
+	recent_games game::retriever::by_summoner( uint64_t id ) const
 	{
 		std::string id_string = str_convert( id );
 		recent_games r;
@@ -72,7 +72,7 @@ namespace riot
 		return r;
 	}
 
-	recent_games game_retriever::by_summoner( const summoner& s ) const
+	recent_games game::retriever::by_summoner( const summoner& s ) const
 	{
 		return by_summoner( s.id );
 	}

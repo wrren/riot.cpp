@@ -32,6 +32,37 @@ namespace riot
 		 */
 		recent_games get_recent_games() const;
 		
+
+		/**
+		 *	Contains the functions for retrieving summoners from the summoner endpoint
+		 */
+		class retriever : public dto_retriever
+		{
+		public:
+
+			/// Endpoint Name
+			static const endpoint_t 	endpoint;
+			static const version_t 		version;
+
+			/**
+			*	Default Constructor
+			*/
+			retriever( riot_client* client );
+
+			/**
+			*	Retrieve a set of summoners by their names
+			* @param names 	Names to search for
+			* @return 		List of summoners found
+			*/
+			std::vector<summoner> by_name( const std::vector<std::string>& names ) const;
+
+			/**
+			*	Retrieve a set of summoners by their ID
+			* @param names 	IDs to search for
+			* @return 		List of summoners found
+			*/
+			std::vector<summoner> by_id( const std::vector<uint64_t>& ids ) const;
+		};
 	protected:
 
 		/**
@@ -41,38 +72,7 @@ namespace riot
 		{
 			return { &id, &name, &icon, &level, &modified };
 		}
-	};
-	
-	/**
-	 *	Contains the functions for retrieving summoners from the summoner endpoint
-	 */
-	class summoner_retriever : public dto_retriever
-	{
-	public:
-
-		/// Endpoint Name
-		static const endpoint_t 	endpoint;
-		static const version_t 		version;
-
-		/**
-		 *	Default Constructor
-		 */
-		summoner_retriever( riot_client* client );
-
-		/**
-		 *	Retrieve a set of summoners by their names
-		 * @param names 	Names to search for
-		 * @return 		List of summoners found
-		 */
-		std::vector<summoner> by_name( const std::vector<std::string>& names ) const;
-
-		/**
-		 *	Retrieve a set of summoners by their ID
-		 * @param names 	IDs to search for
-		 * @return 		List of summoners found
-		 */
-		std::vector<summoner> by_id( const std::vector<uint64_t>& ids ) const;
-	};
+	};	
 }
 
 #endif // RIOT_SUMMONER_H

@@ -9,7 +9,7 @@ TEST_CASE( "Retrieve JSON", "[core]" )
 
 	SECTION( "Get Summoner List" )
 	{
-		auto res = client.summoner().by_name( { "General Atomic" } );
+		auto res = client.summoners().by_name( { "General Atomic" } );
 
 		REQUIRE( res.size() != 0 );
 	}

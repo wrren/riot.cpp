@@ -152,6 +152,35 @@ namespace riot
 		/// Game Stats
 		game_stats	stats{ "stats" };
 
+		/**
+		 *	Contains methods for retrieving games
+		 */
+		class retriever : public dto_retriever
+		{
+		public:
+			/// Game Endpoint Name
+			static const endpoint_t	endpoint;
+			/// Game Endpoint Version
+			static const version_t	version;
+
+			/// Default Constructor
+			retriever( riot_client* client );
+
+			/**
+			*	Retrieve all recent games for the summoner with the specified ID
+			* @param id 	Match ID
+			* @return 	Recent games played by the summoner
+			*/
+			recent_games by_summoner( uint64_t id ) const;
+
+			/**
+			*	Retrieve all recent games played by the specified summoner
+			* @param s	Summoner
+			* @return 	Recent games played by the summoner
+			*/
+			recent_games by_summoner( const summoner& s ) const;
+		};
+
 	private:
 
 		/**
@@ -179,35 +208,6 @@ namespace riot
 		 *	Get child objects for deserialization
 		 */
 		virtual std::vector<dto_base*> get_children() override;
-	};
-
-	/**
-	 *	Contains methods for retrieving games
-	 */
-	class game_retriever : public dto_retriever
-	{
-	public:
-		/// Game Endpoint Name
-		static const endpoint_t	endpoint;
-		/// Game Endpoint Version
-		static const version_t	version;
-
-		/// Default Constructor
-		game_retriever( riot_client* client );
-
-		/**
-		 *	Retrieve all recent games for the summoner with the specified ID
-		 * @param id 	Match ID
-		 * @return 	Recent games played by the summoner
-		 */
-		recent_games by_summoner( uint64_t id ) const;
-
-		/**
-		 *	Retrieve all recent games played by the specified summoner
-		 * @param s	Summoner
-		 * @return 	Recent games played by the summoner
-		 */
-		recent_games by_summoner( const summoner& s ) const;
 	};
 }
 

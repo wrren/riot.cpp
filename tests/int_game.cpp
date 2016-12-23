@@ -9,7 +9,7 @@ TEST_CASE( "Retrieve Recent Games", "[dto]" )
 
 	SECTION( "Get Game List" )
 	{
-		auto res = client.summoner().by_name( { "General Atomic" } );
+		auto res = client.summoners().by_name( { "General Atomic" } );
 		REQUIRE( res.size() != 0 );
 
 		auto recent = client.games().by_summoner( { res[0] } );

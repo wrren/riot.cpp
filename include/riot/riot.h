@@ -3,7 +3,6 @@
 
 #include <riot/core/core.h>
 #include <riot/lol/summoner.h>
-#include <riot/lol/team.h>
 #include <riot/lol/game.h>
 #include <riot/lol/match.h>
 
@@ -39,16 +38,13 @@ namespace riot
 				const options_t = options_t{ true } );
 
 		/// Access Summoner Retrieval Methods
-		const summoner_retriever& summoner() const;
+		const summoner::retriever& summoners() const;
 		
-		/// Access Team Retrieval Methods
-		const team_retriever& team() const;
-
 		/// Access Game Retrieval Methods
-		const game_retriever& games() const;
+		const riot::game::retriever& games() const;
 		
 		/// Access Match Retrieval Methods
-		const match_retriever& match() const;
+		const match::retriever& matches() const;
 
 		/// Region Accessors
 		const region_t region() const;
@@ -64,13 +60,11 @@ namespace riot
 		/// Client Options
 		options_t		m_options;
 		/// Summoner Retriever
-		summoner_retriever	m_summoner;
-		/// Team Retriever
-		team_retriever		m_team;
+		summoner::retriever	m_summoner;
 		/// Match Retriever
-		match_retriever		m_match;
+		match::retriever	m_match;
 		/// Game Retriever
-		game_retriever 		m_games;
+		game::retriever		m_games;
 
 		/// Target API Server Region
 		region_t m_region;

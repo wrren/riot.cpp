@@ -9,6 +9,8 @@
 
 namespace riot
 {
+	/// Client Forward Declaration
+	class riot_client;
 
 	/**
 	 *	Represents a single match in the game
@@ -46,6 +48,29 @@ namespace riot
 		/// Given a summoner, get the matching match participant object for this match
 		match_participant get_participant( const summoner& sum ) const;
 
+		/**
+		 *	Encapsulates methods for retrieving match objects
+		 */
+		class retriever : public dto_retriever
+		{
+		public:
+
+			/// Endpoint Name
+			static const endpoint_t 	endpoint;
+			static const version_t 		version;
+
+			/// Default Constructor
+			retriever( riot_client* client );
+
+			/**
+			*	Retrieve the match object with the specified ID
+			* @param id 	Match ID
+			* @return 	Match object with matching ID
+			*/
+			match by_id( uint64_t id ) const;
+
+		};
+
 	protected:
 
 		/**
@@ -57,31 +82,9 @@ namespace riot
 		}
 	};
 
-	/// Client Forward Declaration
-	class riot_client;
+	
 
-	/**
-	 *	Encapsulates methods for retrieving match objects
-	 */
-	class match_retriever : public dto_retriever
-	{
-	public:
-
-		/// Endpoint Name
-		static const endpoint_t 	endpoint;
-		static const version_t 		version;
-
-		/// Default Constructor
-		match_retriever( riot_client* client );
-
-		/**
-		 *	Retrieve the match object with the specified ID
-		 * @param id 	Match ID
-		 * @return 	Match object with matching ID
-		 */
-		match by_id( uint64_t id ) const;
-
-	};
+	
 }
 
 #endif // RIOT_MATCH_H

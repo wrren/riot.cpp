@@ -4,18 +4,18 @@
 
 namespace riot
 {
-	const endpoint_t match_retriever::endpoint = "match";
-	const version_t match_retriever::version = "2.2";
+	const endpoint_t match::retriever::endpoint = "match";
+	const version_t match::retriever::version = "2.2";
 
 	match::match( const std::string& key ) :
 	dto_complex( key )
 	{}
 
-	match_retriever::match_retriever( riot_client* client ) :
+	match::retriever::retriever( riot_client* client ) :
 	dto_retriever( client )
 	{}
 
-	match match_retriever::by_id( uint64_t id ) const
+	match match::retriever::by_id( uint64_t id ) const
 	{
 		std::string id_string = str_convert( id );
 		match m;

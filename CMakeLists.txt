@@ -57,7 +57,6 @@ set( riot_api_dto_sources 	include/riot/dto/dto.h
 				include/riot/dto/dto_retriever.h 		src/riot/dto/dto_retriever.cpp )
 
 set( riot_api_lol_sources	include/riot/lol/summoner.h 			src/riot/lol/summoner.cpp 
-				include/riot/lol/team.h 			src/riot/lol/team.cpp 
 				include/riot/lol/match.h 			src/riot/lol/match.cpp
 				include/riot/lol/game.h 			src/riot/lol/game.cpp )
 
@@ -73,7 +72,7 @@ set(	riot_unit_test_sources
 
 set( 	riot_integration_test_sources
 	tests/int_key.cpp
-	tests/int_team.cpp
+	tests/int_json.cpp
 	tests/int_match.cpp
 	tests/int_game.cpp
 	tests/int_summoner.cpp )
